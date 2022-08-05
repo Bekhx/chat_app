@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer" },
+    "firstName": { "type": "string" },
+    "lastName": { "type": "string" },
+    "token": { "type": "string" },
+    "chats": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Chat"
+      }
+    }
+  },
+  "example": {
+    "id": 10,
+    "firstName": "John",
+    "lastName": "Doe",
+    "token": "rdewb6sxsmi609zh1eqrempvvpweodcpzh7l0vcgxoxiwngku69nxs9u5xro",
+    "chats": [
+      {
+        "interlocutor": {
+          "id": 52,
+          "firstName": "Mark",
+          "lastName": "Zuckerberg",
+          "email": "mark_meta@gmail.com"
+        },
+        "room": "2d52e031-7039-48bb-8052-056649670bd1"
+      }
+    ]
+  }
+}

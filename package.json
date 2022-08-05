@@ -1,0 +1,45 @@
+{
+  "name": "chat_app",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.ts",
+  "scripts": {
+    "start:dev": "nodemon --config nodemon.json src/app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bekhx/chat_app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bekhx/chat_app/issues"
+  },
+  "homepage": "https://github.com/Bekhx/chat_app#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.18",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "@redis/client": "^1.1.1",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-joi-validation": "^5.0.1",
+    "http-status-codes": "^2.2.0",
+    "joi": "^17.6.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.7.3",
+    "redis": "^4.1.1",
+    "socket.io": "^4.4.1",
+    "swagger-ui-express": "^4.5.0",
+    "uuid": "^8.3.2",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5"
+  }
+}

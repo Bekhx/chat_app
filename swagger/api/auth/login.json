@@ -1,0 +1,40 @@
+{
+  "post": {
+    "tags": [
+      "Auth"
+    ],
+    "summary": "User login operation",
+    "operationId": "login",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "email": { "type": "string" },
+              "password": { "type": "string" }
+            },
+            "example": {
+              "email": "j_doe@gmail.com",
+              "password": "John$Doe"
+            }
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LoginResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

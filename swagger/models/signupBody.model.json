@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "confirmPassword": {
+      "type": "string"
+    }
+  },
+  "example": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john_1990@gmail.com",
+    "password": "qwerty$john",
+    "confirmPassword": "qwerty$john"
+  }
+}

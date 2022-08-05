@@ -1,0 +1,73 @@
+{
+  "get": {
+    "tags": [
+      "Chat"
+    ],
+    "security": [
+      {
+        "Bearer": []
+      }
+    ],
+    "summary": "Returns a list of chats",
+    "operationId": "Get_chats_list",
+    "parameters": [],
+    "requestBody": {},
+    "responses": {
+      "200": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Chat"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "post": {
+    "tags": [
+      "Chat"
+    ],
+    "security": [
+      {
+        "Bearer": []
+      }
+    ],
+    "summary": "Create chat",
+    "operationId": "Create_chat",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "interlocutorEmail": { "type": "string" }
+            },
+            "example": {
+              "interlocutorEmail": "mark_meta@gmail.com"
+            }
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Chat"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

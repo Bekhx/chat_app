@@ -1,0 +1,32 @@
+{
+  "post": {
+    "tags": [
+      "Auth"
+    ],
+    "summary": "New user signup process",
+    "operationId": "signup",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/SignupBody"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SignupResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

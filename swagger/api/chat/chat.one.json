@@ -1,0 +1,40 @@
+{
+  "get": {
+    "tags": [
+      "Chat"
+    ],
+    "security": [
+      {
+        "Bearer": []
+      }
+    ],
+    "summary": "Get chat with all messages",
+    "operationId": "Get_chat",
+    "parameters": [
+      {
+        "name": "room",
+        "in": "path",
+        "description": "Chat room",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "requestBody": {},
+    "responses": {
+      "200": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ChatMessage"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

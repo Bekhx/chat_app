@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "interlocutor": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "email": { "type": "string" }
+      }
+    },
+    "room": { "type": "string" }
+  },
+  "example": {
+    "interlocutor": {
+      "id": 52,
+      "firstName": "Mark",
+      "lastName": "Zuckerberg",
+      "email": "mark_meta@gmail.com"
+    },
+    "room": "2d52e031-7039-48bb-8052-056649670bd1"
+  }
+}

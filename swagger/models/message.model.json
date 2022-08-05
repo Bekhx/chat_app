@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer" },
+    "room": { "type": "string" },
+    "date": { "type": "string" },
+    "message": { "type": "string" },
+    "msgFromId": { "type": "integer" },
+    "msgToId": { "type": "integer" }
+  },
+  "example": {
+    "id": 52,
+    "room": "2d52e031-7039-48bb-8052-056649670bd1",
+    "date": "2022-07-25T15:26:00.781Z",
+    "message": "Hi I'm John Doe",
+    "msgFromId": 10,
+    "msgToId": 36
+  }
+}
