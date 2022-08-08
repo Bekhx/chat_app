@@ -35,27 +35,14 @@ export class UserRepository {
 
     static async getUserByEmail(email: string): Promise<IUser | null> {
         let sql = `SELECT
-                       u.id,
-                       u.first_name AS "firstName",
-                       u.last_name AS "lastName",
-                       u.email,
-                       u.password,
-                       array_agg(
-                               json_build_object(
-                                       'interlocutor', json_build_object(
-                                       'id', u2.id,
-                                       'firstName', u2.first_name,
-                                       'lastName', u2.last_name,
-                                       'email', u2.email
-                                   ),
-                                       'room', uch.room
-                                   )
-                           ) AS "chats"
-                   FROM users u
-                            JOIN user_chats uch ON uch.user_id = u.id
-                            JOIN users u2 on u2.id = uch.interlocutor_id
-                   WHERE u.email = $1
-                   GROUP BY u.id;`;
+                       id,
+                       first_name AS "firstName",
+                       last_name AS "lastName",
+                       email,
+                       password
+                   FROM users
+                   WHERE email = $1
+                   GROUP BY id;`;
 
         let result = await pgQueryPool(sql, [email]);
 

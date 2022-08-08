@@ -1,0 +1,40 @@
+{
+  "dev": {
+    "driver": "pg",
+    "user": {
+      "ENV": "PG_USERNAME"
+    },
+    "password": {
+      "ENV": "PG_PASSWORD"
+    },
+    "host": {
+      "ENV": "PG_HOST"
+    },
+    "database": {
+      "ENV": "PG_DATABASE"
+    },
+    "schema": "public",
+    "port": {
+      "ENV": "PG_PORT"
+    }
+  },
+  "pg": {
+    "driver": "pg",
+    "user": {
+      "ENV": "DB_USERNAME"
+    },
+    "password": {
+      "ENV": "DB_PASSWORD"
+    },
+    "host": {
+      "ENV": "DB_HOST"
+    },
+    "database": {
+      "ENV": "DB_DATABASE"
+    },
+    "schema": "public",
+    "port": {
+      "ENV": "DB_PORT"
+    }
+  }
+}

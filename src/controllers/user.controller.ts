@@ -1,11 +1,12 @@
-import { IValidatedRequest } from "../models/requestModels/validatedRequest.model";
-import { IValidatedRequestBody } from "../models/requestModels/validatedRequestBody.model";
-import { IUserRegistration, IUserAuth, ITokenData, ILogin } from "../models/interfaces/user.model";
-import { UserRepository } from "../repository/user.repository";
-import { ErrorService } from "../services/error.service";
-import { TokenService } from "../services/token.service";
-import { ErrorEnum } from "../models/enums/error.enum";
+import {IValidatedRequest} from "../models/requestModels/validatedRequest.model";
+import {IValidatedRequestBody} from "../models/requestModels/validatedRequestBody.model";
+import {ILogin, ITokenData, IUserAuth, IUserRegistration} from "../models/interfaces/user.model";
+import {UserRepository} from "../repository/user.repository";
+import {ErrorService} from "../services/error.service";
+import {TokenService} from "../services/token.service";
+import {ErrorEnum} from "../models/enums/error.enum";
 import StatusCodes from "http-status-codes";
+import {ChatRepository} from "../repository/chat.repository";
 
 const bcrypt = require('bcrypt');
 
@@ -47,10 +48,12 @@ export class UserController {
         try {
             let user = await UserRepository.getUserByEmail(email);
 
-            if (!user) return ErrorService.error(res, {}, StatusCodes.UNPROCESSABLE_ENTITY, ErrorEnum.userNotFound);
+            if (!user) return ErrorService.error(res, {}, StatusCodes.UNPROCESSABLE_ENTITY, ErrorEnum.usernameNotFound);
 
             let isPassword = bcrypt.compare(password, user.password);
-            if (!isPassword) return ErrorService.error(res, {}, StatusCodes.UNPROCESSABLE_ENTITY, ErrorEnum.userNotFound);
+            if (!isPassword) return ErrorService.error(res, {}, StatusCodes.UNPROCESSABLE_ENTITY, ErrorEnum.passwordNotFound);
+
+            user.chats = await ChatRepository.getChats(req.userId);
 
             const token = await TokenService.generateToken(60);
 
