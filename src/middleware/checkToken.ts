@@ -15,7 +15,7 @@ export const checkApiToken = async (req: IValidatedRequest<IRequiredHeaders>, re
             authorization = req.headers.authorization
         }
 
-        if (!authorization) return ErrorService.error(res, ErrorEnum.token, StatusCodes.UNAUTHORIZED);
+        if (!authorization) return ErrorService.error(res, ErrorEnum.authorization, StatusCodes.UNAUTHORIZED);
 
         const userId = await TokenService.getUserIdByToken(authorization);
 

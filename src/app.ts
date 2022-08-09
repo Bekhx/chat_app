@@ -9,6 +9,7 @@ import { routes } from './routes';
 import WebSocket from "./socket/index.socket";
 import ChatSocket from "../src/controllers/socket/chatSocket.controller";
 import * as swaggerUi from 'swagger-ui-express';
+import path from "path";
 
 const swaggerJSDoc = require('../swagger');
 
@@ -32,6 +33,8 @@ class ServerModule {
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(Cors());
         this.app.use(morgan('combined'));
+        this.app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+        this.app.use('/files', express.static('uploads'));
         this.app.use((req, res, next) => {
             res.setHeader('Access-Control-Expose-Headers', 'original-name, Content-Disposition');
             next();

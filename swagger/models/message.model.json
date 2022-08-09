@@ -5,6 +5,7 @@
     "room": { "type": "string" },
     "date": { "type": "string" },
     "message": { "type": "string" },
+    "filePath": { "type": "string" },
     "msgFromId": { "type": "integer" },
     "msgToId": { "type": "integer" }
   },
@@ -13,6 +14,7 @@
     "room": "2d52e031-7039-48bb-8052-056649670bd1",
     "date": "2022-07-25T15:26:00.781Z",
     "message": "Hi I'm John Doe",
+    "filePath": "http://localhost:8050/files/2d52e031-7039-48bb-8052-056649670bd1.txt",
     "msgFromId": 10,
     "msgToId": 36
   }

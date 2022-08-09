@@ -29,13 +29,25 @@ export interface IRoom {
 export interface IMessageSend extends IRoom {
     interlocutorId: number,
     message: string
-    date: string
+}
+
+export interface IFileSend extends IRoom {
+    interlocutorId: number,
+    extension: string,
+    file: any
+}
+
+export interface IFileMessage extends IRoom {
+    userId: number,
+    interlocutorId: number,
+    filePath: string
 }
 
 export interface IMessage extends IRoom {
     id: number,
     from: number,
     to: number,
-    message: string
+    message: string | null,
+    filePath: string | null,
     date: string
 }

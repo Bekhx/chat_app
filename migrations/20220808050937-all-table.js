@@ -35,8 +35,9 @@ let sqlUp = `
       msg_from_id  integer NOT NULL,
       msg_to_id    integer NOT NULL,
       room         uuid NOT NULL,
-      date         timestamp with time zone NOT NULL,
-      message      text NOT NULL
+      date         timestamp NOT NULL DEFAULT (NOW()),
+      message      text DEFAULT NULL,
+      file_path    varchar(255) DEFAULT NULL
     );
           
     ALTER TABLE public.user_chats ADD FOREIGN KEY (user_id) REFERENCES public.users (id) ON DELETE CASCADE;

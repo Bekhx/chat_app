@@ -15,12 +15,12 @@ export class UserController {
     static async signup(req: IValidatedRequest<IValidatedRequestBody<IUserRegistration>>, res: any) {
         try {
             const isUser = await UserRepository.checkExistenceUser(req.body.email);
-            if (isUser.exists) return ErrorService.error(res, {}, StatusCodes.CONFLICT, ErrorEnum.userAlreadyExistsError);
+            if (isUser.exists) return ErrorService.error(res, {}, StatusCodes.CONFLICT, ErrorEnum.userAlreadyExists);
 
             req.body.password = await bcrypt.hash(req.body.password, 10);
             const userDetails = await UserRepository.registration(req.body);
 
-            const token = await TokenService.generateToken(30);
+            const token = await TokenService.generateToken(60);
 
             const user: IUserAuth = {
                 ...userDetails,
@@ -53,7 +53,7 @@ export class UserController {
             let isPassword = bcrypt.compare(password, user.password);
             if (!isPassword) return ErrorService.error(res, {}, StatusCodes.UNPROCESSABLE_ENTITY, ErrorEnum.passwordNotFound);
 
-            user.chats = await ChatRepository.getChats(req.userId);
+            user.chats = await ChatRepository.getChats(user.id);
 
             const token = await TokenService.generateToken(60);
 

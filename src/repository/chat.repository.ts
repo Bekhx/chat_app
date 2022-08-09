@@ -2,7 +2,7 @@ import { pgQueryPool} from "../database/queryPool";
 import {
     IChat,
     IChatParticipants,
-    ICreateChatParams,
+    ICreateChatParams, IFileMessage,
     IInterlocutor,
     IMessage,
     IRoom
@@ -72,6 +72,7 @@ export class ChatRepository {
                         room,
                         date,
                         message,
+                        file_path AS "filePath",
                         msg_from_id AS "msgFromId",
                         msg_to_id AS "msgToId"
                    FROM messages
