@@ -2,7 +2,7 @@
   "name": "chat_app",
   "version": "0.0.1",
   "description": "",
-  "main": "app.ts",
+  "main": "src/app.ts",
   "scripts": {
     "start:dev": "nodemon --config nodemon.json src/app.ts",
     "up": "db-migrate up --env pg",
@@ -37,6 +37,7 @@
     "express-joi-validation": "^5.0.1",
     "http-status-codes": "^2.2.0",
     "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "pg": "^8.7.3",
     "redis": "^4.1.1",

@@ -1,15 +1,26 @@
 {
   "type": "object",
   "properties": {
-    "id": { "type": "integer" },
-    "firstName": { "type": "string" },
-    "lastName": { "type": "string" },
-    "token": { "type": "string" }
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "token": { "type": "string" },
+        "refreshToken": { "type": "string" }
+      }
+    },
+    "success": { "type": "boolean" }
   },
   "example": {
-    "id": 10,
-    "firstName": "John",
-    "lastName": "Doe",
-    "token": "john_1990@gmail.com"
+    "data": {
+      "id": 10,
+      "firstName": "John",
+      "lastName": "Doe",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyMzc1OTI0LCJleHAiOjE2NjI0NjIzMjR9.Gl8H793f5Bzwur6c4XUxNLBhp0f1tlgG9Yh4A31km_k",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyMzc1OTI0LCJleHAiOjE2NjI1NDg3MjR9.6bx-5LMBZFoyaIIUHvTwy5PNMj4u-lRm13npwxbRsxQ"
+    },
+    "success": true
   }
 }

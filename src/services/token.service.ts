@@ -1,36 +1,38 @@
+import * as JWT from 'jsonwebtoken';
+import { IUserId } from "../models/interfaces/user.model";
+import { ITokens } from "../models/interfaces/auth.model";
 import { redisClient } from "../database/redis";
-import { ITokenData } from "../models/interfaces/user.model";
 
 export class TokenService {
 
-    static async generateToken(count: number): Promise<string> {
-        let _sym: string = 'abcdefghijklmnopqrstuvwxyz1234567890';
-        let str: string = '';
-        for (let i = 0; i < count; i++) {
-            str += _sym[Math.floor(Math.random() * (_sym.length))];
+    static async generateTokens(payload: IUserId): Promise<ITokens> {
+        const accessToken = await JWT.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: process.env.JWT_ACCESS_EXPIRE });
+        const refreshToken = await JWT.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: process.env.JWT_REFRESH_EXPIRE });
+
+        await redisClient.hSet('userTokens', payload.id, refreshToken);
+
+        return {
+            accessToken,
+            refreshToken
         }
-        return str;
     }
 
-    static async addUserToken(params: ITokenData): Promise<void> {
-        let users = await redisClient.hGetAll('usersTokens');
-
-        for (let token in users) {
-            if (JSON.parse(users[token]) === params.id) await redisClient.hDel('usersTokens', token);
-        }
-
-        await redisClient.hSet('usersTokens', params.token, params.id);
+    static async verifyAccessToken(token: string): Promise<IUserId> {
+        const tokenData = await JWT.verify(token, process.env.JWT_ACCESS_SECRET);
+        return { id: tokenData.id };
     }
 
-    static async getUserIdByToken(token: string): Promise<number | null> {
-        let userId = await redisClient.hGet('usersTokens', token);
-
-        if (!userId) return null;
-
-        return JSON.parse(userId);
+    static async verifyRefreshToken(token: string): Promise<IUserId> {
+        const tokenData = await JWT.verify(token, process.env.JWT_REFRESH_SECRET);
+        return { id: tokenData.id };
     }
 
-    static async removeOperatorToken(params: ITokenData) {
-        await redisClient.hDel('usersTokens', params.token);
+    static async getRefreshTokenById(userId: number): Promise<string> {
+        return await redisClient.hGet('userTokens', userId.toString());
     }
+
+    static async removeRefreshToken(userId: number): Promise<void> {
+        await redisClient.hDel('userTokens', userId.toString());
+    }
+
 }

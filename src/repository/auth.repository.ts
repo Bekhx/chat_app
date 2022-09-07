@@ -1,7 +1,8 @@
-import {IUserRegistration, IUserDetails, IExists, IUserId, IUser} from "../models/interfaces/user.model";
+import { IUserDetails, IExists, IUserId, IUser } from "../models/interfaces/user.model";
+import { IUserRegistration } from "../models/interfaces/auth.model";
 import { pgQueryPool } from "../database/queryPool";
 
-export class UserRepository {
+export class AuthRepository {
 
     static async registration( params: IUserRegistration ): Promise<IUserDetails | null> {
         let sql =  `INSERT INTO users (first_name, last_name, email, password) 

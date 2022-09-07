@@ -2,35 +2,30 @@ import StatusCodes from 'http-status-codes';
 import { ErrorEnum } from "../models/enums/error.enum";
 import { ErrorService } from "../services/error.service";
 import { IRequiredHeaders } from "../models/requestModels/header.model";
-import { UserRepository } from "../repository/user.repository";
+import { AuthRepository } from "../repository/auth.repository";
 import { IValidatedRequest} from "../models/requestModels/validatedRequest.model";
 import { TokenService } from "../services/token.service";
 
 export const checkApiToken = async (req: IValidatedRequest<IRequiredHeaders>, res, next) => {
-
-    let authorization: string | null = null;
-
     try {
-        if (req.headers && req.headers.authorization) {
-            authorization = req.headers.authorization
-        }
+        const accessToken: string = req.headers.authorization;
 
-        if (!authorization) return ErrorService.error(res, ErrorEnum.authorization, StatusCodes.UNAUTHORIZED);
+        if (!accessToken) return ErrorService.error(res, {}, StatusCodes.UNAUTHORIZED, ErrorEnum.authorization);
 
-        const userId = await TokenService.getUserIdByToken(authorization);
+        const userData = await TokenService.verifyAccessToken(accessToken);
 
-        if (!userId) return ErrorService.error(res, ErrorEnum.unauthorized, StatusCodes.UNAUTHORIZED);
+        if (!userData) return ErrorService.error(res, {}, StatusCodes.UNAUTHORIZED, ErrorEnum.unauthorized);
 
-        const user = await UserRepository.getUserById(userId);
+        const user = await AuthRepository.getUserById(userData.id);
 
         if (!user) {
-            ErrorService.error(res, ErrorEnum.unauthorized, StatusCodes.UNAUTHORIZED);
+            ErrorService.error(res, {}, StatusCodes.UNAUTHORIZED, ErrorEnum.unauthorized);
         } else {
             req.userId = user.id;
             next();
         }
 
     } catch (error) {
-        ErrorService.error(res, ErrorEnum.unauthorized, StatusCodes.UNAUTHORIZED);
+        ErrorService.error(res, error, error.status, error.message);
     }
 }

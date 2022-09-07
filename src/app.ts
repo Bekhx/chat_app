@@ -10,6 +10,7 @@ import WebSocket from "./socket/index.socket";
 import ChatSocket from "../src/controllers/socket/chatSocket.controller";
 import * as swaggerUi from 'swagger-ui-express';
 import path from "path";
+import * as http from "http";
 
 const swaggerJSDoc = require('../swagger');
 
@@ -17,7 +18,7 @@ class ServerModule {
 
     public host;
     public port;
-    public http: any;
+    public http: http.Server | undefined;
     public app: any;
     public io: WebSocket;
 

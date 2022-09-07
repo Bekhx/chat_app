@@ -1,14 +1,15 @@
 import { Socket } from "socket.io";
 import ISocket from "../../models/interfaces/socket.model";
 import { TokenService } from "../../services/token.service";
-import {IChatParticipants, IFileMessage, IFileSend, IMessage, IMessageSend} from "../../models/interfaces/chat.model";
+import { IChatParticipants, IFileMessage, IFileSend, IMessageSend } from "../../models/interfaces/chat.model";
 import { SocketRepository } from "../../repository/socket/chatSocket.repository";
-import {fileDataSchema, messageDataSchema} from "../../validation/socket/chatSocket.validate";
+import { fileDataSchema, messageDataSchema } from "../../validation/socket/chatSocket.validate";
 import { SocketEventsEnum } from "../../models/enums/socket.enum";
-import {ChatRepository} from "../../repository/chat.repository";
-import {ErrorEnum} from "../../models/enums/error.enum";
+import { ChatRepository } from "../../repository/chat.repository";
+import { ErrorEnum } from "../../models/enums/error.enum";
 import { writeFile } from "fs";
 import { v4 as uuidv4 } from 'uuid';
+import {IUserId} from "../../models/interfaces/user.model";
 
 global.onlineUsers = new Map();
 
@@ -98,13 +99,13 @@ export class ChatSocket implements ISocket {
         try {
             if (!socket.handshake.headers.authorization) return next(new Error(ErrorEnum.authorization));
 
-            let userId = await TokenService.getUserIdByToken(socket.handshake.headers.authorization);
+            let userData = await TokenService.verifyAccessToken(socket.handshake.headers.authorization);
 
-            if (!userId) return next(new Error(ErrorEnum.unauthorized));
+            if (!userData) return next(new Error(ErrorEnum.unauthorized));
 
-            global.onlineUsers.set(userId, socket.id);
+            global.onlineUsers.set(userData.id, socket.id);
 
-            socket.data.userId = userId;
+            socket.data.userId = userData.id;
             next();
 
         } catch (error) {

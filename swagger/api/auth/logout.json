@@ -1,0 +1,54 @@
+{
+  "post": {
+    "tags": [
+      "Auth"
+    ],
+    "security": [
+      {
+        "Bearer": []
+      }
+    ],
+    "summary": "Logout operation",
+    "operationId": "logout",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "refreshToken": { "type": "string" }
+            },
+            "example": {
+              "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyNTQ4MDg5LCJleHAiOjE2NjI2NDg4ODl9.dtZ7bXFq3e2yY_5NO-NOBdrZKJ0WSGB_pVK3oCUco8A"
+            }
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "success": { "type": "boolean" }
+              },
+              "example": {
+                "data": {},
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

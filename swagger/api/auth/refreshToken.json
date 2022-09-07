@@ -1,0 +1,55 @@
+{
+  "post": {
+    "tags": [
+      "Auth"
+    ],
+    "summary": "Refresh token operation",
+    "operationId": "refresh-token",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "refreshToken": { "type": "string" }
+            },
+            "example": {
+              "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyNTQ4MDg5LCJleHAiOjE2NjI2NDg4ODl9.dtZ7bXFq3e2yY_5NO-NOBdrZKJ0WSGB_pVK3oCUco8A"
+            }
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type":  "string"},
+                    "refreshToken": { "type": "string" }
+                  }
+                },
+                "success": { "type": "boolean" }
+              },
+              "example": {
+                "data": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyNTQ4MDg5LCJleHAiOjE2NjI1OTEyODl9.vZknab_yZLy-t_llXELvZUEsCvUAgcoXgsFY7Ava5y8",
+                  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyNTQ4MDg5LCJleHAiOjE2NjI2NDg4ODl9.dtZ7bXFq3e2yY_5NO-NOBdrZKJ0WSGB_pVK3oCUco8A"
+                },
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,32 +1,43 @@
 {
   "type": "object",
   "properties": {
-    "id": { "type": "integer" },
-    "firstName": { "type": "string" },
-    "lastName": { "type": "string" },
-    "token": { "type": "string" },
-    "chats": {
-      "type": "array",
-      "items": {
-        "$ref": "#/components/schemas/Chat"
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "token": { "type": "string" },
+        "refreshToken": { "type": "string" },
+        "chats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Chat"
+          }
+        }
       }
-    }
+    },
+    "success": { "type": "boolean" }
   },
   "example": {
-    "id": 10,
-    "firstName": "John",
-    "lastName": "Doe",
-    "token": "rdewb6sxsmi609zh1eqrempvvpweodcpzh7l0vcgxoxiwngku69nxs9u5xro",
-    "chats": [
-      {
-        "interlocutor": {
-          "id": 52,
-          "firstName": "Mark",
-          "lastName": "Zuckerberg",
-          "email": "mark_meta@gmail.com"
-        },
-        "room": "2d52e031-7039-48bb-8052-056649670bd1"
-      }
-    ]
+    "data": {
+      "id": 10,
+      "firstName": "John",
+      "lastName": "Doe",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyMzc1OTI0LCJleHAiOjE2NjI0NjIzMjR9.Gl8H793f5Bzwur6c4XUxNLBhp0f1tlgG9Yh4A31km_k",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyMzc1OTI0LCJleHAiOjE2NjI1NDg3MjR9.6bx-5LMBZFoyaIIUHvTwy5PNMj4u-lRm13npwxbRsxQ",
+      "chats": [
+        {
+          "interlocutor": {
+            "id": 52,
+            "firstName": "Mark",
+            "lastName": "Zuckerberg",
+            "email": "mark_meta@gmail.com"
+          },
+          "room": "2d52e031-7039-48bb-8052-056649670bd1"
+        }
+      ]
+    },
+    "success": true
   }
 }

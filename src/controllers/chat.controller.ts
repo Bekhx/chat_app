@@ -43,7 +43,7 @@ export class ChatController {
                 room: chatData.room
             }
 
-            return res.send(response);
+            return res.ok(response);
         } catch (error) {
             return ErrorService.error(res, error);
         }
@@ -54,7 +54,7 @@ export class ChatController {
 
             let chats = await ChatRepository.getChats(req.userId);
 
-            return res.send(chats);
+            return res.ok(chats);
         } catch (error) {
             return ErrorService.error(res, error);
         }
@@ -68,7 +68,7 @@ export class ChatController {
 
             let chatMessage = await ChatRepository.getChatMessages(req.params.room);
 
-            return res.send(chatMessage);
+            return res.ok(chatMessage);
         } catch (error) {
             return ErrorService.error(res, error);
         }

@@ -15,6 +15,10 @@ const login = Joi.object({
 
 const id = Joi.object({
     room: Joi.number().required()
-})
+});
 
-export { userData, login, id };
+const refreshToken = Joi.object({
+    refreshToken: Joi.string().required()
+});
+
+export { userData, login, id, refreshToken };
