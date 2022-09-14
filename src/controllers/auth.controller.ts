@@ -55,6 +55,7 @@ export class AuthController {
                 id: user.id,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                email: user.email,
                 chats: user.chats,
                 ...tokens
             };
@@ -70,10 +71,10 @@ export class AuthController {
     static async refresh(req: IValidatedRequest<IValidatedRequestBody<IRefreshToken>>, res: any) {
         try {
             const userData = await TokenService.verifyRefreshToken(req.body.refreshToken);
-            if (!userData || !userData.id) return ErrorService.error(res, {}, StatusCodes.UNAUTHORIZED, 'Invalid refreshToken!');
+            if (!userData || !userData.id) return ErrorService.error(res, {}, StatusCodes.UNAUTHORIZED, ErrorEnum.invalidRefreshToken);
 
             const refreshTokenFromDB = await TokenService.getRefreshTokenById(userData.id);
-            if (req.body.refreshToken !== refreshTokenFromDB) return ErrorService.error(res, {}, StatusCodes.UNAUTHORIZED, 'Invalid refreshToken!');
+            if (req.body.refreshToken !== refreshTokenFromDB) return ErrorService.error(res, {}, StatusCodes.UNAUTHORIZED, ErrorEnum.invalidRefreshToken);
 
             const tokens = await TokenService.generateTokens(userData);
 

@@ -17,6 +17,7 @@ export interface IUserDetails {
     id: number,
     firstName: string,
     lastName: string,
+    email: string
 }
 
 export interface IUserId {

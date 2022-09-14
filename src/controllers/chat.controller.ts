@@ -26,7 +26,7 @@ export class ChatController {
                     room: chat.room
                 }
 
-                return res.send(response);
+                return res.ok(response);
             }
 
             let params: ICreateChatParams = {
@@ -36,7 +36,7 @@ export class ChatController {
             };
             //Create a chat for this user and for the interlocutor
             let chatData: IRoom = await ChatRepository.createChat(params);
-            await ChatRepository.createChatForInterlocutor(params);
+            if (params.userId !== params.interlocutorId) await ChatRepository.createChatForInterlocutor(params);
 
             response = {
                 interlocutor,

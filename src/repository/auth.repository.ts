@@ -7,7 +7,7 @@ export class AuthRepository {
     static async registration( params: IUserRegistration ): Promise<IUserDetails | null> {
         let sql =  `INSERT INTO users (first_name, last_name, email, password) 
                     VALUES ($1, $2, $3, $4) 
-                    RETURNING id, first_name AS "firstName", last_name AS "lastName";`;
+                    RETURNING id, first_name AS "firstName", last_name AS "lastName", email;`;
 
         let result = await pgQueryPool(sql, [params.firstName, params.lastName, params.email, params.password]);
 

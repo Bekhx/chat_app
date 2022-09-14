@@ -61,3 +61,6 @@ class ServerModule {
 }
 
 new ServerModule();
+
+// TODO Realize logging via winston.
+// TODO Add email OTP to registration API.
