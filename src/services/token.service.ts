@@ -6,8 +6,8 @@ import { redisClient } from "../database/redis";
 export class TokenService {
 
     static async generateTokens(payload: IUserId): Promise<ITokens> {
-        const accessToken = await JWT.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: process.env.JWT_ACCESS_EXPIRE });
-        const refreshToken = await JWT.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: process.env.JWT_REFRESH_EXPIRE });
+        const accessToken = JWT.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: process.env.JWT_ACCESS_EXPIRE });
+        const refreshToken = JWT.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: process.env.JWT_REFRESH_EXPIRE });
 
         await redisClient.hSet('userTokens', payload.id, refreshToken);
 
@@ -19,11 +19,13 @@ export class TokenService {
 
     static async verifyAccessToken(token: string): Promise<IUserId> {
         const tokenData = await JWT.verify(token, process.env.JWT_ACCESS_SECRET);
+        // @ts-ignore
         return { id: tokenData.id };
     }
 
     static async verifyRefreshToken(token: string): Promise<IUserId> {
         const tokenData = await JWT.verify(token, process.env.JWT_REFRESH_SECRET);
+        // @ts-ignore
         return { id: tokenData.id };
     }
 

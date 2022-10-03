@@ -1,4 +1,6 @@
-import { Server, Socket } from "socket.io";
+import { Server as HttpServer } from "http";
+import { Server as HttpsServer } from "https";
+import {Server, Socket} from "socket.io";
 
 const WEBSOCKET_CORS = {
     origin: "*",
@@ -8,13 +10,13 @@ const WEBSOCKET_CORS = {
 class WebSocket extends Server {
     private static io: WebSocket;
 
-    constructor(httpServer) {
+    constructor(httpServer: number | HttpServer | HttpsServer) {
         super(httpServer, {
             cors: WEBSOCKET_CORS
         });
     }
 
-    public static getInstance(httpServer?): WebSocket {
+    public static getInstance(httpServer?: number | HttpServer | HttpsServer): WebSocket {
         if (!WebSocket.io) {
             WebSocket.io = new WebSocket(httpServer);
         }
@@ -22,9 +24,9 @@ class WebSocket extends Server {
         return WebSocket.io;
     }
 
-    public initializeHandlers(socketHandlers: Array<any>) {
+    public initializeHandlers(socketHandlers: any[]) {
         socketHandlers.forEach(element => {
-            let namespace = WebSocket.io.of(element.path, (socket: Socket) => {
+            const namespace = WebSocket.io.of(element.path, (socket: Socket) => {
                 element.handler.handleConnection(socket);
             });
 

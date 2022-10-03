@@ -7,7 +7,7 @@ import Cors from 'cors';
 import morgan from 'morgan';
 import { routes } from './routes';
 import WebSocket from "./socket/index.socket";
-import ChatSocket from "../src/controllers/socket/chatSocket.controller";
+import ChatSocket from "./controllers/socket/chatSocket.controller";
 import * as swaggerUi from 'swagger-ui-express';
 import path from "path";
 import * as http from "http";
@@ -36,12 +36,12 @@ class ServerModule {
         this.app.use(morgan('combined'));
         this.app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
         this.app.use('/files', express.static('uploads'));
-        this.app.use((req, res, next) => {
+        this.app.use((req: any, res: { setHeader: (arg0: string, arg1: string) => void; }, next: () => void) => {
             res.setHeader('Access-Control-Expose-Headers', 'original-name, Content-Disposition');
             next();
         });
-        this.app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc, { "showExplorer": true }));
-        this.app.get('/api', (req, res) => {
+        this.app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc));
+        this.app.get('/api', (req: any, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { message: string; }): void; new(): any; }; }; }) => {
             res.status(200).json({
                 message: 'Server is running!'
             });

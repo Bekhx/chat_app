@@ -10,45 +10,50 @@ import { ErrorEnum } from "../../models/enums/error.enum";
 import { writeFile } from "fs";
 import { v4 as uuidv4 } from 'uuid';
 import {IUserId} from "../../models/interfaces/user.model";
+import { redisClient } from "../../database/redis";
 
+// @ts-ignore
 global.onlineUsers = new Map();
 
 export class ChatSocket implements ISocket {
 
     handleConnection(socket: Socket) {
 
-        socket.on(SocketEventsEnum.DISCONNECT, () => {
-            global.onlineUsers.forEach((value, key) => {
-                if (value === socket.id) {
-                    global.onlineUsers.delete(key);
-                }
-            })
+        socket.on(SocketEventsEnum.DISCONNECT, async () => {
+            const onlineUsers = await redisClient.hGetAll('onlineUsers');
+
+            const userId = Object.keys(onlineUsers).find(key => onlineUsers[key] === socket.id);
+
+            await redisClient.hDel('onlineUsers', userId.toString());
         })
 
-        socket.on(SocketEventsEnum.MSG_SEND, async (messageData: IMessageSend) => {
+        socket.on(SocketEventsEnum.MSG_SEND, async (data) => {
             try {
+                const messageData: IMessageSend = JSON.parse(data);
                 await messageDataSchema.validateAsync(messageData);
 
-                let chatData: IChatParticipants = {
+                const chatData: IChatParticipants = {
                     userId: socket.data.userId,
                     interlocutorId:messageData.interlocutorId
                 };
 
-                let chat = await ChatRepository.getChat(chatData);
+                const chat = await ChatRepository.getChat(chatData);
+
                 if (!chat) throw new Error(ErrorEnum.interlocutorNotFound);
 
                 if (messageData.room !== chat.room) throw new Error(ErrorEnum.incorrectRoom);
 
-                let message = await SocketRepository.saveMessage(messageData, socket.data.userId);
+                const message = await SocketRepository.saveMessage(messageData, socket.data.userId);
 
-                let interlocutorSocketId = global.onlineUsers.get(messageData.interlocutorId);
+                const interlocutorSocketId = await redisClient.hGet('onlineUsers', messageData.interlocutorId.toString());
+
                 if (interlocutorSocketId) {
                     socket.to(interlocutorSocketId).emit(SocketEventsEnum.MSG_RECEIVE, message);
                 }
 
             } catch (error) {
                 socket.emit(SocketEventsEnum.ERROR, error.message);
-                console.error(error.message);
+                console.error(error);
             }
         });
 
@@ -56,34 +61,35 @@ export class ChatSocket implements ISocket {
             try {
                 await fileDataSchema.validateAsync(fileData);
 
-                let chatData: IChatParticipants = {
+                const chatData: IChatParticipants = {
                     userId: socket.data.userId,
                     interlocutorId: fileData.interlocutorId
                 };
 
-                let chat = await ChatRepository.getChat(chatData);
+                const chat = await ChatRepository.getChat(chatData);
                 if (!chat) throw new Error(ErrorEnum.interlocutorNotFound);
 
                 if (fileData.room !== chat.room) throw new Error(ErrorEnum.incorrectRoom);
 
-                let fileName = uuidv4();
-                let filePath = `http://${process.env.HOST}:${process.env.PORT}/files/${fileName}.${fileData.extension}`;
-                let pathForWriteFile = `./uploads/${fileName}.${fileData.extension}`;
+                const fileName = uuidv4();
+                const filePath = `http://${process.env.HOST}:${process.env.PORT}/files/${fileName}.${fileData.extension}`;
+                const pathForWriteFile = `./uploads/${fileName}.${fileData.extension}`;
 
-                let messageToSave: IFileMessage = {
+                const messageToSave: IFileMessage = {
                     userId: socket.data.userId,
                     interlocutorId: fileData.interlocutorId,
                     filePath,
                     room: fileData.room
                 }
 
-                let message = await SocketRepository.saveFilePath(messageToSave);
+                const message = await SocketRepository.saveFilePath(messageToSave);
 
                 writeFile(pathForWriteFile, fileData.file, (err) => {
                     if (err) throw new Error(err.message);
                 });
 
-                let interlocutorSocketId = global.onlineUsers.get(fileData.interlocutorId);
+                const interlocutorSocketId = await redisClient.hGet('onlineUsers', fileData.interlocutorId.toString());
+
                 if (interlocutorSocketId) {
                     socket.to(interlocutorSocketId).emit(SocketEventsEnum.MSG_RECEIVE, message);
                 }
@@ -95,15 +101,15 @@ export class ChatSocket implements ISocket {
 
     }
 
-    async middlewareImplementation(socket: Socket, next) {
+    async middlewareImplementation(socket: Socket, next: (arg0?: Error) => void) {
         try {
             if (!socket.handshake.headers.authorization) return next(new Error(ErrorEnum.authorization));
 
-            let userData = await TokenService.verifyAccessToken(socket.handshake.headers.authorization);
+            const userData = await TokenService.verifyAccessToken(socket.handshake.headers.authorization);
 
             if (!userData) return next(new Error(ErrorEnum.unauthorized));
 
-            global.onlineUsers.set(userData.id, socket.id);
+            await redisClient.hSet('onlineUsers', userData.id, socket.id);
 
             socket.data.userId = userData.id;
             next();

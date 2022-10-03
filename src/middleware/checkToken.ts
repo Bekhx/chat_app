@@ -6,7 +6,7 @@ import { AuthRepository } from "../repository/auth.repository";
 import { IValidatedRequest} from "../models/requestModels/validatedRequest.model";
 import { TokenService } from "../services/token.service";
 
-export const checkApiToken = async (req: IValidatedRequest<IRequiredHeaders>, res, next) => {
+export const checkApiToken = async (req: IValidatedRequest<IRequiredHeaders>, res: any, next: () => void) => {
     try {
         const accessToken: string = req.headers.authorization;
 

@@ -11,45 +11,45 @@ import {IExists} from "../models/interfaces/user.model";
 
 export class ChatRepository {
     static async createChat(params: ICreateChatParams): Promise<IRoom> {
-        let sql = `INSERT INTO user_chats (user_id, interlocutor_id, room) VALUES ($1, $2, $3) RETURNING room;`;
+        const sql = `INSERT INTO user_chats (user_id, interlocutor_id, room) VALUES ($1, $2, $3) RETURNING room;`;
 
-        let result = await pgQueryPool(sql, [params.userId, params.interlocutorId, params.room]);
+        const result = await pgQueryPool(sql, [params.userId, params.interlocutorId, params.room]);
 
         return result.rows[0];
     }
 
     static async createChatForInterlocutor(params: ICreateChatParams): Promise<void> {
-        let sql = `INSERT INTO user_chats (user_id, interlocutor_id, room) VALUES ($1, $2, $3);`;
+        const sql = `INSERT INTO user_chats (user_id, interlocutor_id, room) VALUES ($1, $2, $3);`;
 
         await pgQueryPool(sql, [params.interlocutorId, params.userId, params.room]);
     }
 
     static async getChat(params: IChatParticipants): Promise<IRoom> {
-        let sql = `SELECT room
+        const sql = `SELECT room
                    FROM user_chats
                    WHERE user_id = $1
                      AND interlocutor_id = $2;`;
 
-        let result = await pgQueryPool(sql, [params.userId, params.interlocutorId]);
+        const result = await pgQueryPool(sql, [params.userId, params.interlocutorId]);
 
         return result.rows[0];
     }
 
     static async checkInterlocutorByEmail(email: string): Promise<IInterlocutor> {
-        let sql = `SELECT 
+        const sql = `SELECT
                         id,
                         first_name AS "firstName",
                         last_name AS "lastName",
                         email
                    FROM users WHERE email = $1;`;
 
-        let result = await pgQueryPool(sql, [email]);
+        const result = await pgQueryPool(sql, [email]);
 
         return result.rows[0];
     }
 
     static async getChats(userId: number): Promise<IChat[]> {
-        let sql = `SELECT
+        const sql = `SELECT
                        json_build_object(
                                'id', u.id,
                                'firstName', u.first_name,
@@ -61,13 +61,13 @@ export class ChatRepository {
                             JOIN users u on u.id = uch.interlocutor_id
                    WHERE uch.user_id = $1;`;
 
-        let result = await pgQueryPool(sql, [userId]);
+        const result = await pgQueryPool(sql, [userId]);
 
         return result.rows;
     }
 
     static async getChatMessages(room: string): Promise<IMessage[] | []> {
-        let sql = `SELECT 
+        const sql = `SELECT
                         id,
                         room,
                         date,
@@ -79,13 +79,13 @@ export class ChatRepository {
                    WHERE room = $1
                    ORDER BY date;`;
 
-        let result = await pgQueryPool(sql, [room]);
+        const result = await pgQueryPool(sql, [room]);
 
         return result.rows;
     }
 
     static async checkRoom(room: string, userId: number): Promise<IExists> {
-        let sql = `SELECT EXISTS (
+        const sql = `SELECT EXISTS (
                           SELECT uc.id
                           FROM users u
                           JOIN user_chats uc on u.id = uc.user_id
@@ -93,7 +93,7 @@ export class ChatRepository {
                           AND uc.room = $2
                    )::boolean;`;
 
-        let result = await pgQueryPool(sql, [userId, room]);
+        const result = await pgQueryPool(sql, [userId, room]);
 
         return result.rows[0];
     }

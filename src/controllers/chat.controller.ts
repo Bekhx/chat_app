@@ -12,13 +12,13 @@ export class ChatController {
     static async create(req: IValidatedRequest<IValidatedRequestBody<ICreateChat>>, res: any) {
         try {
 
-            let interlocutor = await ChatRepository.checkInterlocutorByEmail(req.body.interlocutorEmail);
+            const interlocutor = await ChatRepository.checkInterlocutorByEmail(req.body.interlocutorEmail);
 
             if (!interlocutor) return ErrorService.error(res, `User by email ${req.body.interlocutorEmail} not found!`, StatusCodes.CONFLICT);
 
             let response: IChat;
-            //Here we check the chat for existence. If a chat exists, return that chat.
-            let chat = await ChatRepository.getChat({ userId: req.userId, interlocutorId: interlocutor.id});
+            // Here we check the chat for existence. If a chat exists, return that chat.
+            const chat = await ChatRepository.getChat({ userId: req.userId, interlocutorId: interlocutor.id});
 
             if (!!chat) {
                 response = {
@@ -26,16 +26,16 @@ export class ChatController {
                     room: chat.room
                 }
 
-                return res.ok(response);
+                return res.send(response);
             }
 
-            let params: ICreateChatParams = {
+            const params: ICreateChatParams = {
                 userId: req.userId,
                 interlocutorId: interlocutor.id,
                 room: uuidv4()
             };
-            //Create a chat for this user and for the interlocutor
-            let chatData: IRoom = await ChatRepository.createChat(params);
+            // Create a chat for this user and for the interlocutor
+            const chatData: IRoom = await ChatRepository.createChat(params);
             if (params.userId !== params.interlocutorId) await ChatRepository.createChatForInterlocutor(params);
 
             response = {
@@ -43,7 +43,7 @@ export class ChatController {
                 room: chatData.room
             }
 
-            return res.ok(response);
+            return res.send(response);
         } catch (error) {
             return ErrorService.error(res, error);
         }
@@ -52,9 +52,9 @@ export class ChatController {
     static async list(req: IValidatedRequest<any>, res: any) {
         try {
 
-            let chats = await ChatRepository.getChats(req.userId);
+            const chats = await ChatRepository.getChats(req.userId);
 
-            return res.ok(chats);
+            return res.send(chats);
         } catch (error) {
             return ErrorService.error(res, error);
         }
@@ -62,13 +62,13 @@ export class ChatController {
 
     static async getChat(req: IValidatedRequest<IValidatedRequestParams<IRoom>>, res: any) {
         try {
-            let isUserChat = await ChatRepository.checkRoom(req.params.room, req.userId);
+            const isUserChat = await ChatRepository.checkRoom(req.params.room, req.userId);
 
             if (!isUserChat.exists) return ErrorService.error(res, {}, StatusCodes.NOT_FOUND, ErrorEnum.incorrectRoom);
 
-            let chatMessage = await ChatRepository.getChatMessages(req.params.room);
+            const chatMessage = await ChatRepository.getChatMessages(req.params.room);
 
-            return res.ok(chatMessage);
+            return res.send(chatMessage);
         } catch (error) {
             return ErrorService.error(res, error);
         }
