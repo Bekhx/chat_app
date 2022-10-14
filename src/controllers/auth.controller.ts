@@ -41,10 +41,10 @@ export class AuthController {
         try {
             const user = await AuthRepository.getUserByEmail(email);
 
-            if (!user) return ErrorService.error(res, {}, StatusCodes.UNPROCESSABLE_ENTITY, ErrorEnum.usernameNotFound);
+            if (!user) return ErrorService.error(res, {}, StatusCodes.UNPROCESSABLE_ENTITY, ErrorEnum.userEmailNotFound);
 
             const isPassword = bcrypt.compare(password, user.password);
-            if (!isPassword) return ErrorService.error(res, {}, StatusCodes.UNPROCESSABLE_ENTITY, ErrorEnum.passwordNotFound);
+            if (!isPassword) return ErrorService.error(res, {}, StatusCodes.UNPROCESSABLE_ENTITY, ErrorEnum.invalidPassword);
 
             user.chats = await ChatRepository.getChats(user.id);
 
