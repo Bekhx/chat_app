@@ -7,25 +7,22 @@ $ npm install -g db-migrate-pg
 ```
 
 ## Important!
-Before starting, the server must have postgresql 13.2.1, node js 16.13.2, redis-server 7.0.2 above installed.
-[Install Redis on Windows](https://redis.io/docs/getting-started/installation/install-redis-on-windows/)
-
-## Migrate database
-First create database chat_app in postgresql
-```sql
-CREATE DATABASE chat_app;
+Before starting, install docker-compose to your machine and start docker containers:
+```bash
+$ docker-compose up
 ```
 
+## Environment
+* need create .env file
+* example: .env.sample
+
+## Migrate database
 ```bash
 # Create tables
 $ npm run up
 # Delete tables
 $ npm run down
 ```
-
-## Environment
-* need create .env file
-* example: .env.sample
 
 ## Start project
 ```bash
