@@ -3,4 +3,3 @@ dist/
 .vscode/
 .idea
 .env
-package-lock.json
